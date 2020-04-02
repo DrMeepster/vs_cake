@@ -453,6 +453,9 @@ function VS::GetTickrate()
 	return 1.0 / ::FrameTime();
 }
 
+//shows up in vs_library????
+_v0();
+
 //-----------------------------------------------------------------------
 // If you wish to delay the code in a specific entity scope,
 // set the value
@@ -467,6 +470,7 @@ function VS::GetTickrate()
 //-----------------------------------------------------------------------
 ::delay     <- function( X, T = 0.0, E = ::ENT_SCRIPT, A = null, C = null ){DoEntFireByInstanceHandle( E, "runscriptcode", ""+X, T, A, C );}
 
+/* BROKEN IN PORTAL 2
 ::Chat      <- function(s){ScriptPrintMessageChatAll(" "+s);}
 ::ChatTeam  <- function(i,s){ScriptPrintMessageChatTeam(i," "+s);}
 ::Alert     <- ::ScriptPrintMessageCenterAll;
@@ -492,4 +496,4 @@ function VS::GetTickrate()
 	pink       = "\x0e",
 	orangered  = "\x0f",
 	orange     = "\x10"
-}
+}*/

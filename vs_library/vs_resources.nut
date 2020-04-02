@@ -88,3 +88,8 @@ function VS::ForceReload(f=_f)
 	::print("Reloading vs_library...\n");
 	::DoIncludeScript(f,::getroottable());
 }
+
+//<#>REMOVE
+::_v0 <- _v0
+::_VEC <- _VEC
+//</#>

@@ -1,0 +1,6 @@
+IncludeScript("vs_cake/vs_resources")
+IncludeScript("vs_cake/vs_math")
+IncludeScript("vs_cake/vs_utility")
+IncludeScript("vs_cake/vs_entity")
+IncludeScript("vs_cake/vs_events")
+IncludeScript("vs_cake/vs_log")
