@@ -1,4 +1,7 @@
 # VScript Library
+
+incomplete fork for Portal 2
+
 [![ver][]](https://github.com/samisalreadytaken/vs_library) [![size][]](/../../raw/master/vs_library.nut)
 
 High-performance, powerful vscript libraries; written mainly for CSGO.
