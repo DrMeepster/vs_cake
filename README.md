@@ -1,6 +1,6 @@
-# VScript Library
+# VScript Library (CAKE EDITION)
 
-incomplete fork for Portal 2
+incomplete fork of vs_library for Portal 2
 
 [![ver][]](https://github.com/samisalreadytaken/vs_library) [![size][]](/../../raw/master/vs_library.nut)
 
