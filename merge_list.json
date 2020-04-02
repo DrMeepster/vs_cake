@@ -1,0 +1,16 @@
+{
+	"vs_library": [
+		"vs_resources",
+		"vs_utility",
+		"vs_entity",
+		"vs_events",
+		"vs_log"
+	],
+	"vs_extended": [
+		"vse_import_vsl",
+		"vs_math2",
+		"vs_collision",
+		"vs_interp",
+		"flags"
+	]
+}
