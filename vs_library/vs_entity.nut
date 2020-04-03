@@ -357,7 +357,7 @@ function VS::DumpEnt( input = null )
 {
 	if( !input )
 	{
-		local ent
+		local ent; //sam forgot the semicolon
 		while( ent = ::Entities.Next(ent) )
 		{
 			local s = ent.GetScriptScope();
