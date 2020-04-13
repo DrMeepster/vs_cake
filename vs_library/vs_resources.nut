@@ -90,7 +90,7 @@ function VS::ForceReload(f=_f)
 }
 
 //should not be present in merged file
-//#REMOVE
+//<REMOVE>
 ::_v0 <- _v0;
 ::_VEC <- _VEC;
-//#/REMOVE
+//</REMOVE>
