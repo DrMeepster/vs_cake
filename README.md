@@ -2,14 +2,11 @@
 
 incomplete fork of vs_library for Portal 2
 
-[![ver][]](https://github.com/samisalreadytaken/vs_library) [![size][]](/../../raw/master/vs_library.nut)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/DrMeepster/vs_cake?label=vs_cake) ![GitHub](https://img.shields.io/github/license/DrMeepster/vs_cake)
 
 High-performance, powerful vscript libraries; written mainly for CSGO and modified for Portal 2.
 
 It is advised to always use the latest version.
-
-[ver]: https://img.shields.io/badge/vs__library-v2.35.2-informational
-[size]: https://img.shields.io/github/size/samisalreadytaken/vs_library/vs_library.nut
 
 ## Documentation
 See [Documentation.md](Documentation.md)
@@ -104,8 +101,6 @@ See [CHANGELOG.txt](CHANGELOG.txt)
 
 ## License
 You are free to use, modify and share this library under the terms of the MIT License. The only condition is keeping the copyright notice, and state whether or not the code was modified. See [LICENSE](LICENSE) for details.
-
-[![](http://hits.dwyl.com/samisalreadytaken/vs_library.svg)](https://hits.dwyl.com/samisalreadytaken/vs_library)
 
 ________________________________
 
