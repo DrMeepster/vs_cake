@@ -3,6 +3,28 @@
 
 --------------------------------
 
+2020-04-10 [v2.35.2]
+- Edge case fix on events
+- ENT_SCRIPT is no longer chosen as an already existing logic_script entity.
+  This gives the user more control, and fixes some issues.
+- Changed VS.FormatWidth parameters to be consistent with the other format functions.
+- Removed default parameter values on the format functions.
+- Minor improvements
+- glow.nut:
+  - Added variable 'DEBUG' for console output
+  - Added entity indices on console output
+
+2020-04-09
+- glow.nut: Changed the method of storage.
+
+2020-04-08
+- Added glow library. Not included in vs_library.
+
+2020-04-06 [v2.35.1]
+- Removed traces of previously removed functions (toRad, toDeg).
+- Changed the local player's targetname to "localplayer" from "player".
+- Minor improvements
+
 2020-03-26 [v2.35.0]
 - Removed default naming for script created entities to improve resource usage, and give the user more control.
 - Removed VS.IsLengthGreaterThan and VS.IsLengthLessThan functions.

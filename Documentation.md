@@ -74,16 +74,16 @@ logic_eventlistener:
 	OnEventFired > player_spawn   > RunScriptCode > VS.Events.player_spawn(event_data)
 ```
 
+You can get the player handle from their userid.
+```lua
+local player = VS.GetPlayerByUserid(userid)
+```
+
 You can access the player data via their scope.
 ```cs
 player.GetScriptScope().userid
 player.GetScriptScope().networkid
 player.GetScriptScope().name
-```
-
-You can get the player handle from their userid.
-```lua
-local player = VS.GetPlayerByUserid(userid)
 ```
 
 Use `VS.DumpPlayers(1)` to see every player data.
@@ -1229,7 +1229,7 @@ ________________________________
 
 <a name="f_FormatPrecision"></a>
 ```cpp
-char VS::FormatPrecision(float f, int n = 2)
+char VS::FormatPrecision(float f, int n)
 ```
 .tointeger() or .tofloat() can be used on the result
 
@@ -1251,7 +1251,7 @@ ________________________________
 
 <a name="f_FormatHex"></a>
 ```cpp
-char VS::FormatHex(int i, int n = 2)
+char VS::FormatHex(int i, int n)
 ```
 .tointeger() or .tofloat() can be used on the result
 
@@ -1276,7 +1276,7 @@ ________________________________
 
 <a name="f_FormatExp"></a>
 ```cpp
-char VS::FormatExp(float f, int n = 2)
+char VS::FormatExp(float f, int n)
 ```
 .tointeger() or .tofloat() can be used on the result
 
@@ -1301,16 +1301,16 @@ ________________________________
 
 <a name="f_FormatWidth"></a>
 ```cpp
-char VS::FormatWidth(char s, char i, int n = 2)
+char VS::FormatWidth(char i, int n, char s = " ")
 ```
-First parameter can be either `0` or `" "`
+Parameter `s` can be either `0` or `" "`
 
 <details><summary>Example</summary>
 
 ```lua
-local res  = VS.FormatWidth(0,   "test",  5)
-local res2 = VS.FormatWidth(0,   123,     6)
-local res3 = VS.FormatWidth(" ", 123,     6)
+local res  = VS.FormatWidth("test", 5, 0   )
+local res2 = VS.FormatWidth(123,    6, 0   )
+local res3 = VS.FormatWidth(123,    6, " " )
 
 printl(res)
 printl(res2)
@@ -2282,6 +2282,8 @@ The exported log file name prefix.
 By default, every file is appended with random strings to make each exported file unique. Putting `:` in the beginning will remove this suffix, and each export will overwrite the previously exported file. E.g.: `VS.Log.filePrefix = ":vs.log"`
 
 The user can specify export directories by using `/`. E.g.: `VS.Log.filePrefix = "bin/vs.log"`
+
+Example file name: `vs.log_c9ae41f5d8d.log`
 ________________________________
 
 <a name="f_LogAdd"></a>
@@ -2593,7 +2595,7 @@ ________________________________
 
 <a name="f_AngleQuaternion"></a>
 ```cpp
-Quaternion VS::AngleQuaternion(Qangle angles, Quaternion& out = _QUAT)
+Quaternion VS::AngleQuaternion(QAngle angles, Quaternion& out = _QUAT)
 ```
 QAngle -> Quaternion
 ________________________________

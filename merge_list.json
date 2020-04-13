@@ -10,7 +10,6 @@
 		"vse_import_vsl",
 		"vs_math2",
 		"vs_collision",
-		"vs_interp",
-		"flags"
+		"vs_interp"
 	]
 }
