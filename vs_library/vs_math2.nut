@@ -80,7 +80,7 @@ class::matrix3x4
 
 if( VS.arrayFind(VS.slots_default,"Quaternion") == null )
 {
-	VS.slots_default.append("Quaternion")
+	VS.slots_default.append("Quaternion"); //sam forgot a semicolon
 	VS.slots_default.append("matrix3x4")
 };;
 

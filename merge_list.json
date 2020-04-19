@@ -1,15 +1,15 @@
 {
-	"vs_library": [
-		"vs_resources",
-		"vs_utility",
-		"vs_entity",
-		"vs_events",
-		"vs_log"
+	"vs_library.nut": [
+		"vs_resources.nut",
+		"vs_utility.nut",
+		"vs_entity.nut",
+		"vs_events.nut",
+		"vs_log.nut"
 	],
-	"vs_extended": [
-		"vse_import_vsl",
-		"vs_math2",
-		"vs_collision",
-		"vs_interp"
+	"vs_extended.nut": [
+		"import_vsl.nut",
+		"vs_math2.nut",
+		"vs_collision.nut",
+		"vs_interp.nut"
 	]
 }
