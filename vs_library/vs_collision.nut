@@ -15,7 +15,9 @@
 //
 //-----------------------------------------------------------------------
 
+//<REMOVE> should already be present in vs_extended.nut
 IncludeScript("vs_library/vs_math2");
+//</REMOVE>
 
 //-----------------------------------------------------------------------------
 // Clears the trace

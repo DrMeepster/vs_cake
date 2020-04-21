@@ -88,8 +88,7 @@ function VS::ForceReload(f=_f)
 	::DoIncludeScript(f,::getroottable());
 }
 
-//should not be present in merged file
-//<REMOVE>
+//<REMOVE> should not be present in merged file
 ::_v0 <- _v0;
 ::_VEC <- _VEC;
 //</REMOVE>
