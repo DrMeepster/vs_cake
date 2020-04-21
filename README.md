@@ -106,7 +106,7 @@ ________________________________
 
 ## See also
 * [**vscripts repository**][vscripts]: Some of my projects using this library
-* [**YouTube channel**][youtube]: Related videos and tutorials
+* [**YouTube channel**][youtube]
 * [**Notepad++ syntax highlighter**][npp]
 
 [vscripts]: https://github.com/samisalreadytaken/vscripts
