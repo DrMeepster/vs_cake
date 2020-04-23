@@ -1,7 +1,7 @@
 #Copyright (c) DrMeepster 2020
 #Under MIT License
 
-import json, os, sys, argparse, fnmatch
+import json, os, sys, argparse
 import regex #different from re, use 'pip install regex'
 
 decomment = regex.compile("/\*.*?\*/ | //[^\n]*?$", regex.M|regex.X|regex.S)
@@ -56,7 +56,7 @@ def executeDirectives(text):
 def _replaceWhitespace(match):
     return " " if match.group("sp") else ""
 
-def processFile(file):
+def minify(file):
     file = executeDirectives(file)
     file = decomment.sub(" ", file)
     file = dewhitespace.sub(_replaceWhitespace, file)
@@ -75,7 +75,7 @@ def makeMerged(files, header=None):
         except FileNotFoundError as e:
             log(e, level=0, err=True)
 
-    out = processFile(out)
+    out = minify(out)
 
     if header:
         with open(header, "r") as f:
@@ -83,65 +83,77 @@ def makeMerged(files, header=None):
 
     return out
 
-def writeMerged(srcJson, outputPath, file="*", header=None, mode="w"):
+def writeMerged(srcJson, outputPath, header=None, mode="w"):
     i = 0
     for k in srcJson:
         i += 1
-        if not fnmatch.fnmatch(k, file):
-            log(f"Skipping file {k} ({i}/{len(srcJson)})")
-            continue
 
+        outPath = os.path.join(outputPath, k)
+
+        if mode == "x" and os.path.exists(outPath):
+            log(f"Skipping file {k}: already exists ({i}/{len(srcJson)})")
+            continue
+        
         log(f"Creating file {k} ({i}/{len(srcJson)})")
         merged = makeMerged(srcJson[k], header)
 
         try:
-            with open(os.path.join(outputPath, k), mode) as f:
+            with open(outPath, mode) as f:
                 f.write(merged)
         except FileExistsError as e:
             log(e, level=0, err=True)
 
-def makeSingle(filename):
-    return {os.path.basename(filename): filename}
+def makeSingle(filename, rename):
+    return {rename if rename else os.path.basename(filename): [filename]}
 
 def main():
     global verbocity
     
     parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(required=True)
 
-    parser.add_argument("mergelist")
-    parser.add_argument("output", nargs="?", default="")
-    parser.add_argument("mergepath", nargs="?", default="")
-    parser.add_argument("mergefile", nargs="?", default="*")
-    
     parser.add_argument("-H", "--header")
-    parser.add_argument("-s", "--single", action="store_true")
     parser.add_argument("-x", "--exclusive", action="store_true")
 
     vArgs = parser.add_mutually_exclusive_group()
-    vArgs.add_argument("-v", "--verbose", action="count")
+    vArgs.add_argument("-v", "--verbose", action="count", default=0)
     vArgs.add_argument("-q", "--quiet", action="count")
 
-    #args = parser.parse_args()
-    #args = parser.parse_args(["-h"])
-    args = parser.parse_args(["-vv","-H","header.txt","merge_list.json","build","vs_library"])
+    merge = sub.add_parser("merge", aliases=["m"],
+        help="Merge and minify files specified in a json file")
+    
+    merge.set_defaults(cmd="merge")
+    merge.add_argument("mergelist", help="Path to a json with the files to merge")
+    merge.add_argument("output", nargs="?", default=".", help="Path to output files to")
+    merge.add_argument("mergepath", nargs="?", default=".",
+        help="Path to look for source files")
+
+    single = sub.add_parser("single", aliases=["s"], help="Minify a single file")
+    single.set_defaults(cmd="single")
+    single.add_argument("file", help="Path to the file to minify")
+    single.add_argument("output", nargs="?", default=".", help="Path to output files to")
+    single.add_argument("name", nargs="?", help="New name for the file")
+
+    args = parser.parse_args()
 
     defaultVerbocity = 1
 
-    if args.verbose:
-        verbocity = defaultVerbocity + args.verbose
-    elif args.quiet:
+    if args.quiet:
         verbocity = defaultVerbocity - args.quiet
     else:
-        verbocity = defaultVerbocity
+        verbocity = defaultVerbocity + args.verbose
+        
+    src = {
+        "single": lambda args: makeSingle(args.file, args.name),
+        "merge": lambda args: findSource(args.mergelist, args.mergepath)
+    }[args.cmd](args)
 
-    writeMerged(findSource(args.mergelist, args.mergepath),
-                "build", args.mergefile, args.header, "x" if args.exclusive else "w")
+    writeMerged(
+        src, args.output, args.header,
+        "x" if args.exclusive else "w"
+    )
     
-    #print(makeMerged([r"vs_library\vs_math2.nut"]))
     log("Done.")
 
 if __name__ == "__main__":
     main()
-    
-#files = findSource(mergeList, mergePath)
-#print(makeMerged(files["vs_library"], headerFile))
