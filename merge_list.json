@@ -3,7 +3,6 @@
 		"vs_resources.nut",
 		"vs_utility.nut",
 		"vs_entity.nut",
-		"vs_events.nut",
 		"vs_log.nut"
 	],
 	"vs_extended.nut": [
