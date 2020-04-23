@@ -68,12 +68,15 @@ def makeMerged(files, header=None):
     i = 0
     for file in files:
         i += 1
+
+        if not os.path.exists(file):
+            log(f" - Skipping file {os.path.basename(file)}: does not exist ({i}/{len(files)})",
+                err=True)
+            continue
+        
         log(f" - Reading file {os.path.basename(file)} ({i}/{len(files)})")
-        try:
-            with open(file, "r") as f:
+        with open(file, "r") as f:
                 out += f.read()
-        except FileNotFoundError as e:
-            log(e, level=0, err=True)
 
     out = minify(out)
 
@@ -91,7 +94,7 @@ def writeMerged(srcJson, outputPath, header=None, mode="w"):
         outPath = os.path.join(outputPath, k)
 
         if mode == "x" and os.path.exists(outPath):
-            log(f"Skipping file {k}: already exists ({i}/{len(srcJson)})")
+            log(f"Skipping file {k}: already exists ({i}/{len(srcJson)})", err=True)
             continue
         
         log(f"Creating file {k} ({i}/{len(srcJson)})")
