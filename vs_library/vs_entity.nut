@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------
 ::EntFireByHandle <- function( target, action, value = "", delay = 0.0, activator = null, caller = null )
 {
-	DoEntFireByInstanceHandle( target, action.tostring(), value.tostring(), delay, activator, caller );
+	::DoEntFireByInstanceHandle( target, action.tostring(), value.tostring(), delay, activator, caller );
 }
 
 //-----------------------------------------------------------------------
@@ -20,18 +20,19 @@
 /* DOES NOT WORK IN PORTAL 2
 ::PrecacheModel <- function( str )
 {
-	ENT_SCRIPT.PrecacheModel(str);
+	::ENT_SCRIPT.PrecacheModel(str);
 }
 */
 
 ::PrecacheScriptSound <- function( str )
 {
-	ENT_SCRIPT.PrecacheSoundScript(str); //function name is different in Portal 2
+	::ENT_SCRIPT.PrecacheSoundScript(str); //function name is different in Portal 2
 }
 
 /* Not needed in Portal 2
 //-----------------------------------------------------------------------
 // Prevent the entity to be released every round
+// MakePersistent
 //-----------------------------------------------------------------------
 function VS::MakePermanent( handle )
 {
@@ -53,43 +54,13 @@ function VS::SetParent( hChild, hParent )
 }
 
 //-----------------------------------------------------------------------
-// Create and return a game_text entity with the input keyvalues
-//
-// Input  : string [ targetname ]
-// Output : table [ keyvalues ]
+// Show game_text
+// if msg, set msg
 //-----------------------------------------------------------------------
-function VS::CreateGameText( targetname = null, kv = null )
+function VS::ShowGameText( hEnt, hTarget, msg = null, delay = 0.0 )
 {
-	return CreateEntity("game_text", targetname?targetname.tostring():null, kv);
-}
-
-//function VS::CreateWorldText( msg, cl, size, ori, ang, perm = false )
-//{
-//	local e = CreateEntity("point_worldtext",null,
-//	{
-//		spawnflags = 0,
-//		origin = ori,
-//		angles = ang,
-//		message = msg,
-//		textsize = size,
-//		color = cl
-//	});
-//
-//	if(perm) MakePermanent(e);
-//
-//	return e;
-//}
-
-//-----------------------------------------------------------------------
-// Create and return an env_hudhint entity
-//
-// Input  : string [ targetname ]
-//          string [ message ]
-// Output : handle [ entity ]
-//-----------------------------------------------------------------------
-function VS::CreateHudHint( targetname = null, msg = "" )
-{
-	return CreateEntity("env_hudhint", targetname?targetname.tostring():null, {message = msg});
+	if( msg ) SetKeyString( hEnt, "message", ""+msg );
+	::EntFireByHandle( hEnt, "display", "", delay, hTarget );
 }
 
 //-----------------------------------------------------------------------
@@ -122,26 +93,24 @@ function VS::HideHudHint( hEnt, hTarget, delay = 0.0 )
 //-----------------------------------------------------------------------
 function VS::CreateMeasure( g, n = null, p = false, e = true, s = 1.0 )
 {
-	local r = e ? n ? n.tostring() : "vs_ref_"+UniqueString() : n ? n.tostring() : null;
+	local r = e ? n ? n.tostring() : "vs.ref_"+UniqueString() : n ? n.tostring() : null;
 
 	if(!r || !r.len()) throw "Invalid targetname";
 
 	local e = CreateEntity( "logic_measure_movement",
-	                        e?r:null,
 	                        { measuretype = e ? 1 : 0,
 	                          measurereference = "",
 	                          targetreference = r,
 	                          target = r,
 	                          measureretarget = "",
-	                          targetscale = s.tofloat() } );
+	                          targetscale = s.tofloat(),
+	                          targetname = e?r:null }, p );
 
 	::EntFireByHandle(e,"setmeasurereference",r);
 
 	::EntFireByHandle(e,"setmeasuretarget",g);
 
 	::EntFireByHandle(e,"enable");
-
-	//if(p) MakePermanent(e);
 
 	return e;
 }
@@ -164,21 +133,22 @@ function VS::SetMeasure(h,s)
 //          float [ lower (randomtime, used when refire == null) ]
 //          float [ upper (randomtime, used when refire == null) ]
 //          bool [ oscillator (alternate between OnTimerHigh and OnTimerLow outputs) ]
-//          bool [ start disabled ? ]
+//          bool [ start disabled ]
+//          bool [ make permanent ]
 // Output : entity
 //-----------------------------------------------------------------------
-function VS::CreateTimer( targetname = null, refire = 1.0, lower = 1.0, upper = 5.0, oscillator = false, disabled = true )
+function VS::CreateTimer( targetname = null, refire = 1.0, lower = null, upper = null, oscillator = false, disabled = true, perm = false )
 {
 	local ent = CreateEntity( "logic_timer",
-	                          targetname?targetname.tostring():null,
 	                          { UseRandomTime = 0,
-	                            LowerRandomBound = lower.tofloat(),
-	                            UpperRandomBound = upper.tofloat() } );
+	                            targetname = targetname?targetname.tostring():null }, perm );
 
 	if( refire )
 		SetKeyFloat( ent, "RefireTime", refire.tofloat() );
 	else
 	{
+		SetKeyFloat( ent, "LowerRandomBound", lower.tofloat() );
+		SetKeyFloat( ent, "UpperRandomBound", upper.tofloat() );
 		SetKeyInt( ent, "UseRandomTime", 1 );
 		SetKeyInt( ent, "spawnflags", oscillator.tointeger() );
 	};
@@ -191,9 +161,9 @@ function VS::CreateTimer( targetname = null, refire = 1.0, lower = 1.0, upper = 
 //-----------------------------------------------------------------------
 // Create and return a timer that executes Func
 // VS.Timer( false, 0.5, Think )
-// VS.Timer( bDisabled, fInterval, Func, tScope = this, bExecInEnt = false )
+// VS.Timer( bDisabled, fInterval, Func, tScope = this, bExecInEnt = false, bMakePerm = false )
 //-----------------------------------------------------------------------
-function VS::Timer(b,f,s,t=null,e=false)
+function VS::Timer(b,f,s,t=null,e=false,p=false)
 {
 	if(!f)
 	{
@@ -201,7 +171,7 @@ function VS::Timer(b,f,s,t=null,e=false)
 		throw"NULL REFIRE TIME";
 	};
 
-	local h = CreateTimer(null,f,0,0,0,b);
+	local h = CreateTimer(null,f,null,null,null,b,p);
 	OnTimer(h,s,t?t:GetCaller(),e);
 	return h;
 }
@@ -209,7 +179,7 @@ function VS::Timer(b,f,s,t=null,e=false)
 //-----------------------------------------------------------------------
 // Add OnTimer output to the timer entity to execute the input function
 // Input  : handle [ entity ]
-//          string OR closure [ function ]
+//          string|closure [ function ]
 // Output :
 //-----------------------------------------------------------------------
 function VS::OnTimer( hEnt, Func, tScope = null, bExecInEnt = false )
@@ -224,7 +194,7 @@ function VS::OnTimer( hEnt, Func, tScope = null, bExecInEnt = false )
 //
 // Input  : handle [ entity ]
 //          string [ output ]
-//          string OR closure [ function ]
+//          string|closure [ function ]
 //          table [ scope ] // null === this
 //          bool [ bool ] // execute the function in the scope of hEnt
 // Output : table [ent scope]
@@ -259,10 +229,7 @@ function VS::AddOutput( hEnt, sOutput, Func, tScope = null, bExecInEnt = false )
 // This could still be useful, but only in very specific scenarios
 function VS::AddOutput2( hEnt, sOutput, Func, tScope = null, bExecInEnt = false )
 {
-	if( hEnt.GetScriptScope() )
-		return AddOutput( hEnt, sOutput, Func, tScope, bExecInEnt );
-
-	if( typeof Func == "function" )
+	if( hEnt.GetScriptScope() || typeof Func == "function" )
 		return AddOutput( hEnt, sOutput, Func, tScope, bExecInEnt );
 
 	if( typeof Func != "string" )
@@ -309,19 +276,20 @@ function VS::AddInput( hEnt, sInput, Func, tScope = null, bExecInEnt = false )
 	// print("** Adding input '" + sInput + "' to '" + hEnt.GetName() + "'. Execute '" + GetFuncName(Func) + "()' in '" + (bExecInEnt?hEnt.GetScriptScope():GetTableName(tScope)) + ".'\n");
 }
 */
+
 //-----------------------------------------------------------------------
 // CreateByClassname, set keyvalues, return handle
 //
 // Input  : string [ entity classname ]
-//          string [ entity targetname ]
 //          table [ keyvalues ] // { speed = speed, health = 1337 }
+//          bool [ make permanent ]
 // Output : handle [ entity ]
 //-----------------------------------------------------------------------
-function VS::CreateEntity( classname, targetname = null, keyvalues = null )
+function VS::CreateEntity( classname, keyvalues = null, perm = false )
 {
-	local ent = ::Entities.CreateByClassname( classname );
-	if( targetname ) SetName( ent, targetname );
-	if( typeof keyvalues == "table" ) foreach( k, v in keyvalues ) SetKey( ent, k, v );
+	local ent = ::Entities.CreateByClassname(classname);
+	if( typeof keyvalues == "table" ) foreach( k, v in keyvalues ) SetKey(ent, k, v);
+	if(perm) MakePermanent(ent);
 	return ent;
 }
 
@@ -347,8 +315,11 @@ function VS::SetKey( ent, key, val )
 		case "Vector":
 			return ent.__KeyValueFromVector( key, val );
 
+		case "null":
+			return true;
+
 		default:
-			throw "Invalid input type: " + typeof(val);
+			throw "Invalid input type: " + typeof val;
 	}
 }
 
