@@ -23,6 +23,8 @@ ________________________________
 ________________________________
 
 ## Installation
+This section is currently incorrect
+
 Place `vs_library.nut` in your vscripts directory `/csgo/scripts/vscripts/`
 
 ### Downloading
@@ -53,67 +55,6 @@ Add this following line in the beginning of your script: `IncludeScript("vs_libr
 Done!
 
 It only needs to be included once in the lifetime of the map running in the server. Including it more than once does not affect the performance. 
-
-### Setting up basis event listeners
-Set up these event listeners to automatically validate player userids. This will let you access player userids, SteamIDs, and Steam names.
-
-Entity targetnames are arbitrary.
-```
-logic_eventlistener:
-	targetname: player_connect
-	EventName:  player_connect
-	FetchEventData: Yes
-
-	OnEventFired > player_connect > RunScriptCode > VS.Events.player_connect(event_data)
-
-logic_eventlistener:
-	targetname: player_spawn
-	EventName:  player_spawn
-	FetchEventData: Yes
-
-	OnEventFired > player_spawn   > RunScriptCode > VS.Events.player_spawn(event_data)
-```
-
-You can get the player handle from their userid.
-```lua
-local player = VS.GetPlayerByUserid(userid)
-```
-
-You can access the player data via their scope.
-```cs
-player.GetScriptScope().userid
-player.GetScriptScope().networkid
-player.GetScriptScope().name
-```
-
-Use `VS.DumpPlayers(1)` to see every player data.
-```
-] script VS.DumpPlayers(1)
-
-=======================================
-1 players found
-2 bots found
-[BOT]    - ([2] player) :: 8b4f4f2f171_player
---- Script dump for entity ([2] player)
-   networkid = "BOT"
-   userid = 24
-   name = "Chet"
---- End script dump
-[BOT]    - ([3] player) :: b02f4f5e377_player
---- Script dump for entity ([3] player)
-   networkid = "BOT"
-   userid = 25
-   name = "Vitaliy"
---- End script dump
-[PLAYER] - ([1] player) :: b3ff40ba523_player
---- Script dump for entity ([1] player)
-   networkid = "STEAM_1:0:11101"
-   userid = 14
-   name = "Sam"
---- End script dump
-=======================================
-```
-________________________________
 
 ## Keywords and symbols used in this documentation
 | Type                  | Example                                                                             |
