@@ -17,16 +17,19 @@
 
 //-----------------------------------------------------------------------
 
+/* DOES NOT WORK IN PORTAL 2
 ::PrecacheModel <- function( str )
 {
 	ENT_SCRIPT.PrecacheModel(str);
 }
+*/
 
 ::PrecacheScriptSound <- function( str )
 {
-	ENT_SCRIPT.PrecacheScriptSound(str);
+	ENT_SCRIPT.PrecacheSoundScript(str); //function name is different in Portal 2
 }
 
+/* Not needed in Portal 2
 //-----------------------------------------------------------------------
 // Prevent the entity to be released every round
 //-----------------------------------------------------------------------
@@ -34,6 +37,7 @@ function VS::MakePermanent( handle )
 {
 	SetKeyString( handle, "classname", "soundent" );
 }
+*/
 
 //-----------------------------------------------------------------------
 // Set child's parent
@@ -111,7 +115,7 @@ function VS::HideHudHint( hEnt, hTarget, delay = 0.0 )
 //
 // Input  : string [ target targetname ] (e.g. player targetname)
 //          string [ reference entity name ] (optional)
-//          bool   [ make the reference entity permanent ]
+//          bool   [ make the reference entity permanent ] kept only for compatibility
 //          bool   [ measure eyes ]
 //          float  [ scale ]
 // Output : handle reference
@@ -137,7 +141,7 @@ function VS::CreateMeasure( g, n = null, p = false, e = true, s = 1.0 )
 
 	::EntFireByHandle(e,"enable");
 
-	if(p) MakePermanent(e);
+	//if(p) MakePermanent(e);
 
 	return e;
 }
